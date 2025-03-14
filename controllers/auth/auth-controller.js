@@ -29,10 +29,48 @@ const registerUser = async (req, res) => {
     res.status(500).json({ success: false, message: "Some Error Occured" });
   }
 };
-// login
 
+// login
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const checkUser = await User.findOne({ email });
+    if (!checkUser) {
+      return res.json({ success: false, message: "User doesn't exist " });
+    }
+    const checkPasswordMatch = await bcrypt.compare(
+      password,
+      checkUser.password
+    );
+    if (!checkPasswordMatch) {
+      return res.json({ success: false, message: "Password is Incorrect" });
+    }
+    const token = jwt.sign(
+      {
+        id: checkUser._id,
+        role: checkUser.role,
+        email: checkUser.email,
+      },
+      "CLIENT_SECRET_KEY",
+      { expiresIn: "1h" }
+    );
+
+    res.cookie("token", token, { httpOnly: true, secure: false }).json({
+      success: true,
+      message: "User Logged in Successfully",
+      user: {
+        email: checkUser.email,
+        role: checkUser.role,
+        id: checkUser._id,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Some Error Occured" });
+  }
+};
 // logout
 
 // Auth middleware
 
-module.exports = { registerUser };
+module.exports = { registerUser, loginUser };

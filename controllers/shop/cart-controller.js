@@ -186,7 +186,9 @@ const deleteCartItem = async (req, res) => {
       });
     }
 
-    cart.items.filter((item) => item.productId._id.toString() !== productId);
+    cart.items = cart.items.filter(
+      (item) => item.productId._id.toString() !== productId
+    );
 
     await cart.save();
     await cart.populate({

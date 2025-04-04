@@ -51,7 +51,7 @@ const addToCart = async (req, res) => {
 
 const fetchCartItem = async (req, res) => {
   try {
-    const { userId } = req.params();
+    const { userId } = req.params;
     if (!userId) {
       return res.status(400).josn({
         success: false,
@@ -59,7 +59,7 @@ const fetchCartItem = async (req, res) => {
       });
     }
     const cart = await Cart.findOne({ userId }).populate({
-      path: "item.productId",
+      path: "items.productId",
       select: "image title price salePrice",
     });
 
@@ -74,7 +74,7 @@ const fetchCartItem = async (req, res) => {
       (productItem) => productItem.productId
     );
 
-    if (validItems.length < cart.items.lemgth) {
+    if (validItems.length < cart.items.length) {
       cart.items = validItems;
       await cart.save();
     }
@@ -85,7 +85,7 @@ const fetchCartItem = async (req, res) => {
       title: item.productId.title,
       price: item.productId.price,
       salePrice: item.productId.salePrice,
-      quantity: item.productId.quantity,
+      quantity: item.quantity,
     }));
 
     res.status(200).json({
@@ -136,7 +136,7 @@ const updateCartItemQty = async (req, res) => {
     await cart.save();
 
     await cart.populate({
-      path: "item.productId",
+      path: "items.productId",
       select: "image title price salePrice",
     });
 
@@ -167,14 +167,15 @@ const updateCartItemQty = async (req, res) => {
 const deleteCartItem = async (req, res) => {
   try {
     const { userId, productId } = req.params;
-    if ((!userId, productId)) {
+    if (!userId || !productId) {
       return res.status(400).json({
         success: false,
         message: "Invalid Data Provide",
       });
     }
+
     const cart = await Cart.findOne({ userId }).populate({
-      path: "item.productId",
+      path: "items.productId",
       select: "image title price salePrice",
     });
 
@@ -187,9 +188,9 @@ const deleteCartItem = async (req, res) => {
 
     cart.items.filter((item) => item.productId._id.toString() !== productId);
 
-    await cart.items.save();
-    await Cart.populate({
-      path: "item.productId",
+    await cart.save();
+    await cart.populate({
+      path: "items.productId",
       select: "image title price salePrice",
     });
 

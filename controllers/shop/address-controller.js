@@ -1,0 +1,74 @@
+const Address = require("../../models/Address");
+
+const addAddress = async (req, res) => {
+  try {
+    const { userId, address, city, pincode, phone, notes } = req.body;
+
+    if (!userId || !address || !city || !pincode || !phone || !notes) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid data",
+      });
+    }
+    const newCreatedAddress = new Address({
+      userId,
+      address,
+      city,
+      pincode,
+      phone,
+      notes,
+    });
+
+    await newCreatedAddress.save();
+    res.status(200).json({
+      success: true,
+      data: newCreatedAddress,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      sucess: false,
+      message: "Error Occured",
+    });
+  }
+};
+
+const editAddress = async (req, res) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      sucess: false,
+      message: "Error Occured",
+    });
+  }
+};
+
+const fetchAllAddress = async (req, res) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      sucess: false,
+      message: "Error Occured",
+    });
+  }
+};
+
+const deleteAddress = async (req, res) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      sucess: false,
+      message: "Error Occured",
+    });
+  }
+};
+
+module.exports = {
+  addAddress,
+  editAddress,
+  fetchAllAddress,
+  deleteAddress,
+};

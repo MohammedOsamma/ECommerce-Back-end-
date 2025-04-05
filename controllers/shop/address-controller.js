@@ -33,8 +33,22 @@ const addAddress = async (req, res) => {
   }
 };
 
-const editAddress = async (req, res) => {
+const fetchAllAddress = async (req, res) => {
   try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(404).json({
+        success: false,
+        message: "User is required",
+      });
+    }
+
+    const addressList = await Address.find({ userId });
+    res.status(200).json({
+      success: true,
+      data: addressList,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -44,7 +58,7 @@ const editAddress = async (req, res) => {
   }
 };
 
-const fetchAllAddress = async (req, res) => {
+const editAddress = async (req, res) => {
   try {
   } catch (err) {
     console.log(err);

@@ -100,6 +100,26 @@ const editAddress = async (req, res) => {
 
 const deleteAddress = async (req, res) => {
   try {
+    const { userId, addressId } = req.params;
+    if (!userId || !addressId) {
+      return res.status(400).json({
+        success: false,
+        message: "User Id & Address Id are required",
+      });
+    }
+
+    const address = await Address.findOneAndDelete({ _id: addressId, userId });
+
+    if (!address) {
+      return res.status(404).json({
+        success: false,
+        message: "Address not Found!",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Address Deleted Successfully!",
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({

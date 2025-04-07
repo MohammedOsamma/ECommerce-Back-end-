@@ -60,7 +60,7 @@ const fetchAllAddress = async (req, res) => {
 
 const editAddress = async (req, res) => {
   const { userId, addressId } = req.params;
-  const { formData } = req.body;
+  const formData = req.body;
   if (!userId || !addressId) {
     return res.status(400).json({
       success: false,
@@ -73,7 +73,7 @@ const editAddress = async (req, res) => {
       _id: addressId,
       userId,
     },
-    { formData },
+    formData,
     { new: true }
   );
 

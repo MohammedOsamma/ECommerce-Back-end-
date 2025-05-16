@@ -54,7 +54,6 @@ const addProductReview = async (req, res) => {
       data: newReview,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       success: false,
       message: "Error Occured ",
@@ -72,7 +71,7 @@ const getProductReviews = async (req, res) => {
       data: reviews,
     });
   } catch (err) {
-    console.log(err);
+    l;
     res.status(500).json({
       success: false,
       message: "Error Occured ",

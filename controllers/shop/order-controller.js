@@ -19,8 +19,6 @@ const createOrder = async (req, res) => {
       orderUpdateDate,
     } = req.body;
 
-    console.log("Creating order with data:", req.body);
-
     // إنشاء طلب PayPal
     const request = new paypal.orders.OrdersCreateRequest();
     request.requestBody({

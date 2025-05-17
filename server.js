@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -14,9 +16,7 @@ const shopReviewRouter = require("./routes/shop/review-routes");
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
 mongoose
-  .connect(
-    "mongodb+srv://MohamedOsama:MohamedOsama%40123@cluster0.ykr8a.mongodb.net/"
-  )
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("Monogo Connected"))
   .catch((err) => {
     console.log("Here", err);
@@ -27,7 +27,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
